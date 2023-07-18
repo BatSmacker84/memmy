@@ -110,6 +110,15 @@ export function CustomTabBar({
             });
           };
 
+          const searchLongPress = () => {
+            onGenericHapticFeedback();
+
+            // Change to search screen and focus the search box
+            navigation.navigate("SearchStack", {
+              screen: "Search",
+            });
+          };
+
           if (route.name === "ProfileStack") {
             return (
               <AccountsContextMenu navigation={navigation}>
@@ -128,6 +137,27 @@ export function CustomTabBar({
                   />
                 </TouchableOpacity>
               </AccountsContextMenu>
+            );
+          }
+
+          if (route.name === "SearchStack") {
+            return (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityState={isFocused ? { selected: true } : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                onLongPress={searchLongPress}
+                style={{ flex: 1 }}
+              >
+                <IconWithText
+                  icon={icon}
+                  label={label as string}
+                  color={color}
+                  badge={options.tabBarBadge?.toString()}
+                />
+              </TouchableOpacity>
             );
           }
 

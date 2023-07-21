@@ -8,6 +8,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { runOnJS } from "react-native-reanimated";
+import { useAppSelector } from "../../../../store";
+import { selectSettings } from "../../../slices/settings/settingsSlice";
 
 interface IProps {
   children: React.ReactNode;
@@ -15,6 +17,7 @@ interface IProps {
 
 function TabBarGestureHandler({ children }: IProps) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { swipeToVote } = useAppSelector(selectSettings);
 
   const onPanEnd = useCallback(
     (event: GestureStateChangeEvent<PanGestureHandlerEventPayload>) => {
@@ -26,6 +29,8 @@ function TabBarGestureHandler({ children }: IProps) {
     },
     []
   );
+
+  if (!swipeToVote) return children;
 
   const panGesture = Gesture.Pan()
     .maxPointers(1)

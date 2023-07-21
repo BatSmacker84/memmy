@@ -34,9 +34,10 @@ import { useAppSelector } from "../../../../store";
 import { selectSettings } from "../../../slices/settings/settingsSlice";
 import ImageButton from "../Buttons/ImageButton";
 import { onGenericHapticFeedback } from "../../../helpers/HapticFeedbackHelpers";
+import Toast from "../Toast";
 
 interface IProps {
-  source: { uri: string };
+  source: string;
   postId?: number;
   heightOverride?: number;
   widthOverride?: number;
@@ -527,7 +528,7 @@ function ImageViewer({
           ref={nonViewerRef}
           style={{ opacity: expanded ? 0 : 1 }}
         >
-          <ImageButton src={source.uri}>
+          <ImageButton src={source}>
             <FastImage
               style={[
                 {
@@ -536,7 +537,7 @@ function ImageViewer({
                 },
               ]}
               resizeMode="contain"
-              source={source}
+              source={{ uri: source }}
               onLoad={onLoad}
             />
           </ImageButton>
@@ -589,9 +590,9 @@ function ImageViewer({
                     )}
                   </VStack>
                 </BlurView>
-                {!source.uri.includes(".gif") && (
+                {!source.includes(".gif") && (
                   <FastImage
-                    source={source}
+                    source={{ uri: source }}
                     style={[
                       heightOverride
                         ? { height: heightOverride, width: widthOverride }
@@ -604,7 +605,7 @@ function ImageViewer({
               </View>
             )) || (
               <FastImage
-                source={source}
+                source={{ uri: source }}
                 style={[
                   heightOverride
                     ? { height: heightOverride, width: widthOverride }
@@ -618,6 +619,7 @@ function ImageViewer({
         </Pressable>
       )}
       <Modal visible={expanded} transparent>
+        <Toast />
         {/* eslint-disable-next-line react/style-prop-object */}
         <StatusBar style="dark" />
         <Animated.View style={[accessoriesStyle]}>
@@ -628,7 +630,7 @@ function ImageViewer({
             <Animated.View style={[styles.imageModal, backgroundStyle]}>
               <Animated.View style={[positionStyle]}>
                 <AnimatedFastImage
-                  source={source}
+                  source={{ uri: source }}
                   style={[scaleStyle, dimensionsStyle]}
                 />
               </Animated.View>
@@ -636,7 +638,7 @@ function ImageViewer({
           </GestureDetector>
         </View>
         <Animated.View style={[accessoriesStyle]}>
-          <ImageViewFooter source={source.uri} />
+          <ImageViewFooter source={source} />
         </Animated.View>
       </Modal>
     </View>
